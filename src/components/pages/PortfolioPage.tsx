@@ -97,7 +97,7 @@ export default function PortfolioPage({ onNavigate }: PortfolioPageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-background to-accent/20">
+      <section className="py-12 lg:py-20 bg-gradient-to-br from-primary/5 via-background to-accent/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Our <span className="text-primary">Portfolio</span>

@@ -1,7 +1,7 @@
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
 import { Route } from '../Router';
-import { Users, Target, Globe, Zap, Heart } from 'lucide-react';
+import { Users, Target, Heart, Zap, Compass, Telescope } from 'lucide-react';
 import { ImageWithFallback } from '../figma/ImageWithFallback';
 
 interface AboutPageProps {
@@ -69,18 +69,20 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-background to-accent/20">
+      <section className="py-12 lg:py-20 bg-gradient-to-br from-primary/5 via-background to-accent/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6">
+          <div className="text-left max-w-3xl">
+            <h1 className="text-4xl lg:text-6xl font-bold mb-6 text-slate-900 dark:text-white">
               About <span className="text-primary">Kaizen Digital</span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              We are a forward-thinking digital solutions company dedicated to transforming businesses 
-              through innovative technology and strategic thinking. Our mission is to inspire borderless 
-              thinking and create digital experiences that drive real business results.
+            <p className="text-xl text-slate-600 dark:text-muted-foreground mb-8 leading-relaxed">
+              Transforming businesses through innovative digital solutions and strategic thinking.
             </p>
-            <Button size="lg" onClick={() => onNavigate('contact')}>
+            <Button 
+              size="lg" 
+              onClick={() => onNavigate('contact')}
+              className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white px-8 py-4 text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+            >
               Get in Touch
             </Button>
           </div>
@@ -92,8 +94,8 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6">Our Story</h2>
-              <div className="space-y-4 text-muted-foreground">
+              <h2 className="text-3xl lg:text-4xl font-bold mb-6 text-slate-900 dark:text-white">Our Story</h2>
+              <div className="space-y-4 text-slate-600 dark:text-muted-foreground">
                 <p>
                   Founded in 2019, Kaizen Digital Solutions emerged from a simple belief: that 
                   every business deserves access to world-class digital solutions, regardless 
@@ -132,23 +134,25 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
       </section>
 
       {/* Our Values Section */}
-      <section className="py-20 bg-card">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-20 bg-gradient-to-br from-slate-50/50 via-white to-primary/5 dark:bg-card">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Values</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              These core values guide everything we do and shape how we work with our clients
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">Our Values</h2>
+            <p className="text-xl text-slate-600 dark:text-muted-foreground max-w-3xl mx-auto">
+              The principles that guide everything we do
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="space-y-6">
             {values.map((value, index) => (
-              <Card key={index} className="border-border text-center">
-                <CardContent className="p-8">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+                <CardContent className="p-8 flex items-start space-x-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
                     <value.icon className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="font-semibold text-lg mb-3">{value.title}</h3>
-                  <p className="text-muted-foreground text-sm">{value.description}</p>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-xl mb-3 text-slate-900 dark:text-white">{value.title}</h3>
+                    <p className="text-slate-600 dark:text-muted-foreground leading-relaxed">{value.description}</p>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -157,29 +161,31 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
       </section>
 
       {/* Leadership Team Section */}
-      <section className="py-20">
+      <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Leadership Team</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4 text-slate-900 dark:text-white">Our Leadership Team</h2>
+            <p className="text-xl text-slate-600 dark:text-muted-foreground max-w-3xl mx-auto">
               Meet the passionate leaders driving our mission forward
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {team.map((member, index) => (
-              <Card key={index} className="border-border text-center group hover:shadow-lg transition-all">
-                <CardContent className="p-8">
+              <Card key={index} className="border-0 shadow-xl hover:shadow-2xl transition-all duration-500 group bg-white/90 dark:bg-slate-800/90 backdrop-blur-lg hover:-translate-y-2">
+                <CardContent className="p-8 text-center">
                   <div className="relative mb-6">
-                    <ImageWithFallback
-                      src={member.image}
-                      alt={member.name}
-                      className="w-24 h-24 rounded-full mx-auto object-cover"
-                    />
-                    <div className="absolute inset-0 rounded-full bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div className="w-28 h-28 mx-auto relative">
+                      <ImageWithFallback
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full rounded-full object-cover border-4 border-white dark:border-slate-700 shadow-lg"
+                      />
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-lg mb-1">{member.name}</h3>
-                  <p className="text-primary font-medium text-sm mb-3">{member.role}</p>
-                  <p className="text-muted-foreground text-sm">{member.bio}</p>
+                  <h3 className="font-bold text-xl mb-2 text-slate-900 dark:text-white group-hover:text-primary transition-colors">{member.name}</h3>
+                  <p className="text-primary font-semibold text-sm mb-4 bg-primary/10 px-3 py-1 rounded-full inline-block">{member.role}</p>
+                  <p className="text-slate-600 dark:text-muted-foreground text-sm leading-relaxed">{member.bio}</p>
                 </CardContent>
               </Card>
             ))}
@@ -191,14 +197,15 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
       <section className="py-20 bg-accent/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-            <Card className="border-border">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-                  <Target className="w-6 h-6 text-primary" />
+            <Card className="border-border relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10"></div>
+              <CardContent className="p-8 relative">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/10 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                  <Compass className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Our Mission</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  To empower businesses of all sizes with innovative digital solutions that drive 
+                <h3 className="text-2xl font-bold mb-4 text-primary">Our Mission</h3>
+                <p className="text-slate-600 dark:text-muted-foreground leading-relaxed">
+                  <strong className="text-slate-900 dark:text-foreground">To empower businesses of all sizes</strong> with innovative digital solutions that drive 
                   growth, enhance efficiency, and create meaningful connections with their customers. 
                   We strive to make advanced technology accessible and impactful for every organization 
                   we serve.
@@ -206,14 +213,15 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
               </CardContent>
             </Card>
 
-            <Card className="border-border">
-              <CardContent className="p-8">
-                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6">
-                  <Globe className="w-6 h-6 text-primary" />
+            <Card className="border-border relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-accent/20 via-transparent to-primary/5"></div>
+              <CardContent className="p-8 relative">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-xl flex items-center justify-center mb-6 shadow-lg">
+                  <Telescope className="w-8 h-8 text-primary" />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">Our Vision</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  To become the leading catalyst for digital transformation, known for inspiring 
+                <h3 className="text-2xl font-bold mb-4 text-primary">Our Vision</h3>
+                <p className="text-slate-600 dark:text-muted-foreground leading-relaxed">
+                  <strong className="text-slate-900 dark:text-foreground">To become the leading catalyst for digital transformation,</strong> known for inspiring 
                   borderless thinking and creating solutions that transcend traditional limitations. 
                   We envision a world where every business can harness the full power of digital 
                   technology to achieve their dreams.
@@ -233,20 +241,19 @@ export default function AboutPage({ onNavigate }: AboutPageProps) {
           <p className="text-xl mb-8 text-primary-foreground/90">
             Let's discuss how we can help transform your business with our innovative digital solutions.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-6 justify-center">
             <Button 
               size="lg" 
-              variant="secondary"
               onClick={() => onNavigate('request')}
-              className="bg-background text-foreground hover:bg-background/90"
+              className="bg-gradient-to-r from-accent to-primary hover:from-accent/90 hover:to-primary/90 text-white font-bold px-10 py-4 text-lg shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-110 border-0 rounded-xl"
             >
               Start a Project
             </Button>
             <Button 
               size="lg" 
               variant="outline"
-              onClick={() => onNavigate('careers')}
-              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary"
+              onClick={() => onNavigate('services')}
+              className="border-2 border-primary-foreground/30 text-primary-foreground hover:bg-gradient-to-r hover:from-primary-foreground/10 hover:to-accent/10 hover:text-primary-foreground font-semibold px-10 py-4 text-lg backdrop-blur-sm hover:border-primary-foreground/60 transition-all duration-500 hover:scale-105 rounded-xl shadow-lg hover:shadow-xl"
             >
               Join Our Team
             </Button>

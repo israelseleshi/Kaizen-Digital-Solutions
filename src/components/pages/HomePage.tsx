@@ -1,47 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '../ui/button';
 import { Card, CardContent } from '../ui/card';
-import { OptimizedButton } from '../OptimizedButton';
-import { ImageWithFallback } from '../figma/ImageWithFallback';
 import { Route } from '../Router';
-import { ArrowRight, Zap, Globe, Cog, GraduationCap, TrendingUp, Users, Award, CheckCircle } from 'lucide-react';
-import { useIntersectionObserver } from '../../hooks/useIntersectionObserver';
-import { analytics } from '../../utils/analytics';
-import { useToast } from '../../hooks/useToast';
+import { ArrowRight, Users, Globe, Zap, CheckCircle, Cog, GraduationCap, Award, TrendingUp, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ImageWithFallback } from '../figma/ImageWithFallback';
 
 interface HomePageProps {
   onNavigate: (route: Route) => void;
 }
 
-// Animated counter hook
-function useCountUp(end: number, start: number = 0, duration: number = 2000) {
-  const [count, setCount] = React.useState(start);
-  const [isActive, setIsActive] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!isActive) return;
-
-    let startTime: number;
-    const animate = (currentTime: number) => {
-      if (!startTime) startTime = currentTime;
-      const progress = Math.min((currentTime - startTime) / duration, 1);
-      const easeOutCubic = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(start + (end - start) * easeOutCubic));
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-    requestAnimationFrame(animate);
-  }, [isActive, end, start, duration]);
-
-  const startCounting = () => setIsActive(true);
-  
-  return { count, startCounting };
-}
-
 export default function HomePage({ onNavigate }: HomePageProps) {
-  const { toast } = useToast();
   const services = [
     {
       icon: Globe,
@@ -50,8 +18,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     },
     {
       icon: TrendingUp,
-      title: 'Digital Marketing & SEO',
-      description: 'Strategic digital marketing solutions to grow your online presence'
+      title: 'Digital Marketing',
+      description: 'Strategic marketing campaigns that drive growth and engagement'
     },
     {
       icon: Cog,
@@ -77,68 +45,209 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     { number: 24, suffix: '/7', label: 'Support Available' }
   ];
 
-  // Intersection observer for animations
-  const { elementRef: heroRef } = useIntersectionObserver({ threshold: 0.2 });
-  const { elementRef: statsRef, isVisible: statsVisible } = useIntersectionObserver({ threshold: 0.5 });
-  const { elementRef: servicesRef } = useIntersectionObserver({ threshold: 0.1 });
+  // Simple stats display component
+  function StatCounter({ end, label, suffix = '' }: { end: number; label: string; suffix?: string }) {
+    return (
+      <div className="text-center">
+        <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">
+          {end}{suffix}
+        </div>
+        <div className="text-muted-foreground">{label}</div>
+      </div>
+    );
+  }
 
-  // Counter hooks for stats
-  const projectsCount = useCountUp(stats[0].number, 0, 2000);
-  const clientsCount = useCountUp(stats[1].number, 0, 2000);
-  const yearsCount = useCountUp(stats[2].number, 0, 2000);
-  const supportCount = useCountUp(stats[3].number, 0, 2000);
+  // Testimonials Carousel Component
+  function TestimonialsCarousel({ testimonials }: { testimonials: Array<{
+    name: string;
+    title: string;
+    company: string;
+    text: string;
+    image: string;
+    rating: number;
+    project: string;
+  }> }) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
-  const counters = [projectsCount, clientsCount, yearsCount, supportCount];
+    // Auto-play functionality
+    useEffect(() => {
+      if (!isAutoPlaying) return;
+      
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+      }, 5000);
 
-  // Start counters when stats section is visible
-  useEffect(() => {
-    if (statsVisible) {
-      try {
-        counters.forEach(counter => counter.startCounting());
-      } catch (error) {
-        console.warn('Counter animation failed:', error);
-      }
-    }
-  }, [statsVisible]);
+      return () => clearInterval(interval);
+    }, [isAutoPlaying, testimonials.length]);
 
-  // Track page engagement
-  useEffect(() => {
-    try {
-      analytics.trackEvent({
-        action: 'page_view',
-        category: 'homepage',
-        label: 'hero_section'
-      });
-    } catch (error) {
-      console.warn('Analytics tracking failed:', error);
-    }
-  }, []);
+    const goToSlide = (index: number) => {
+      setCurrentIndex(index);
+      setIsAutoPlaying(false);
+      setTimeout(() => setIsAutoPlaying(true), 10000); // Resume auto-play after 10s
+    };
+
+    const goToPrevious = () => {
+      setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+      setIsAutoPlaying(false);
+      setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
+
+    const goToNext = () => {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length);
+      setIsAutoPlaying(false);
+      setTimeout(() => setIsAutoPlaying(true), 10000);
+    };
+
+    return (
+      <div className="relative">
+        {/* Main Carousel Container */}
+        <div className="overflow-hidden">
+          <div 
+            className="flex transition-transform duration-700 ease-in-out"
+            style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+          >
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="w-full flex-shrink-0 px-4">
+                <Card className="group relative border-0 shadow-2xl bg-gradient-to-br from-white/80 to-white/60 dark:from-slate-800/80 dark:to-slate-900/60 backdrop-blur-xl hover:shadow-3xl transition-all duration-700 hover:-translate-y-2 overflow-hidden max-w-4xl mx-auto">
+                  {/* Premium Card Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  
+                  {/* Luxury Border Gradient */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary p-[1px] rounded-xl">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl h-full w-full"></div>
+                  </div>
+                  
+                  <CardContent className="relative p-8 lg:p-12">
+                    {/* Star Rating */}
+                    <div className="flex items-center justify-center mb-8">
+                      {[...Array(testimonial.rating)].map((_, i) => (
+                        <div key={i} className="w-6 h-6 text-amber-400 mr-1">
+                          <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                          </svg>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Quote */}
+                    <div className="relative mb-10 text-center">
+                      <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 text-8xl text-primary/20 font-serif">"</div>
+                      <p className="text-xl lg:text-2xl text-slate-700 dark:text-muted-foreground leading-relaxed italic relative z-10 px-8">
+                        {testimonial.text}
+                      </p>
+                      <div className="absolute -bottom-6 right-1/2 transform translate-x-1/2 text-8xl text-primary/20 font-serif rotate-180">"</div>
+                    </div>
+                    
+                    {/* Project Badge */}
+                    <div className="flex justify-center mb-8">
+                      <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        {testimonial.project}
+                      </div>
+                    </div>
+                    
+                    {/* Client Info */}
+                    <div className="flex items-center justify-center space-x-6">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary to-accent rounded-full blur-sm opacity-75 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <ImageWithFallback
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          className="relative w-20 h-20 rounded-full object-cover border-2 border-white dark:border-slate-700 shadow-lg"
+                        />
+                      </div>
+                      <div className="text-center">
+                        <div className="font-bold text-xl text-foreground">{testimonial.name}</div>
+                        <div className="text-base font-medium text-primary">{testimonial.title}</div>
+                        <div className="text-base text-muted-foreground">{testimonial.company}</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Navigation Arrows */}
+        <button
+          onClick={goToPrevious}
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+          aria-label="Previous testimonial"
+        >
+          <ChevronLeft className="w-6 h-6 text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors" />
+        </button>
+        
+        <button
+          onClick={goToNext}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 flex items-center justify-center group"
+          aria-label="Next testimonial"
+        >
+          <ChevronRight className="w-6 h-6 text-slate-600 dark:text-slate-300 group-hover:text-primary transition-colors" />
+        </button>
+
+        {/* Dots Indicator */}
+        <div className="flex justify-center mt-12 space-x-3">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? 'bg-primary scale-125 shadow-lg'
+                  : 'bg-slate-300 dark:bg-slate-600 hover:bg-primary/50 hover:scale-110'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Auto-play indicator */}
+        <div className="flex justify-center mt-4">
+          <div className="text-xs text-slate-700 dark:text-muted-foreground flex items-center space-x-2">
+            <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? 'bg-primary animate-pulse' : 'bg-slate-400'}`}></div>
+            <span>{isAutoPlaying ? 'Auto-playing' : 'Paused'}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const testimonials = [
     {
       name: 'Sarah Johnson',
+      title: 'CEO & Founder',
       company: 'TechStart Inc.',
-      text: 'Kaizen Digital transformed our digital presence completely. Their team is exceptional.',
-      image: 'business professional woman'
+      text: 'Kaizen Digital transformed our digital presence completely. Their strategic approach and exceptional execution exceeded all our expectations. The ROI has been phenomenal.',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&h=400&fit=crop&crop=faces',
+      rating: 5,
+      project: 'Complete Digital Transformation'
     },
     {
       name: 'Michael Chen',
+      title: 'CTO',
       company: 'Global Ventures',
-      text: 'The custom software solution they built has revolutionized our operations.',
-      image: 'business professional man'
+      text: 'The custom software solution they built has revolutionized our operations. Their technical expertise and attention to detail is unmatched in the industry.',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&h=400&fit=crop&crop=faces',
+      rating: 5,
+      project: 'Enterprise Software Development'
     },
     {
       name: 'Emily Rodriguez',
+      title: 'Marketing Director',
       company: 'EcoTech Solutions',
-      text: 'Outstanding digital marketing results. Our traffic increased by 300% in 6 months.',
-      image: 'business professional woman'
+      text: 'Outstanding digital marketing results that speak for themselves. Our traffic increased by 300% in 6 months, and conversion rates doubled. Simply incredible.',
+      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&h=400&fit=crop&crop=faces',
+      rating: 5,
+      project: 'Digital Marketing & SEO'
     }
   ];
 
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section ref={heroRef} className="relative py-20 lg:py-32 overflow-hidden">
+      <section className="relative py-12 lg:py-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/20"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -149,46 +258,33 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               </div>
               <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
                 Inspiring
-                <span className="text-primary"> Borderless</span>
+                <br />
+                <span className="text-primary">Borderless</span>
                 <br />
                 Thinking
               </h1>
               <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-                Transform your business with cutting-edge digital solutions. From web development 
-                to AI integration, we help you navigate the digital landscape with confidence.
+                Transform your business with cutting-edge digital solutions. 
+                From web development to AI integration, we help you 
+                navigate the digital landscape with confidence.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <OptimizedButton 
-                  size="lg" 
-                  onClick={() => {
-                    try {
-                      toast({
-                        title: "Let's get started!",
-                        description: "We're excited to work with you on your digital transformation.",
-                      });
-                    } catch (error) {
-                      console.warn('Toast notification failed:', error);
-                    }
-                    onNavigate('request');
-                  }}
-                  trackingLabel="hero_start_project"
-                  trackingCategory="conversion"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground animate-fade-in"
-                  debounceMs={1000}
+                <Button
+                  size="lg"
+                  onClick={() => onNavigate('request')}
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4"
                 >
                   Start Your Project
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </OptimizedButton>
-                <OptimizedButton 
-                  variant="outline" 
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+                <Button
                   size="lg"
+                  variant="outline"
                   onClick={() => onNavigate('portfolio')}
-                  trackingLabel="hero_view_work"
-                  className="animate-fade-in"
-                  style={{ animationDelay: '200ms' }}
+                  className="px-8 py-4"
                 >
                   View Our Work
-                </OptimizedButton>
+                </Button>
               </div>
             </div>
             <div className="relative">
@@ -221,23 +317,18 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* Stats Section */}
-      <section ref={statsRef} className="py-16 bg-card">
+      <section className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl lg:text-4xl font-bold text-primary mb-2">
-                  {counters[index].count}{stat.suffix}
-                </div>
-                <div className="text-muted-foreground">{stat.label}</div>
-              </div>
+              <StatCounter key={index} end={stat.number} label={stat.label} suffix={stat.suffix} />
             ))}
           </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section ref={servicesRef} className="py-20">
+      <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Digital Solutions</h2>
@@ -288,15 +379,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 <div className="flex items-start space-x-4">
                   <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
                   <div>
-                    <h3 className="font-semibold mb-2">Custom Solutions</h3>
-                    <p className="text-muted-foreground">Every project is tailored to your specific business needs and goals.</p>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-4">
-                  <CheckCircle className="w-6 h-6 text-primary mt-1 flex-shrink-0" />
-                  <div>
-                    <h3 className="font-semibold mb-2">Continuous Support</h3>
-                    <p className="text-muted-foreground">We provide ongoing support and maintenance to ensure your success.</p>
+                    <h3 className="font-semibold mb-2">Proven Results</h3>
+                    <p className="text-muted-foreground">Track record of successful projects and satisfied clients across industries.</p>
                   </div>
                 </div>
                 <div className="flex items-start space-x-4">
@@ -341,31 +425,40 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">What Our Clients Say</h2>
-            <p className="text-xl text-muted-foreground">Don't just take our word for it</p>
+      <section className="py-20 bg-gradient-to-br from-slate-50 via-white to-primary/5 dark:from-slate-900 dark:via-background dark:to-primary/5 relative overflow-hidden">
+        {/* Premium Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary to-accent rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-accent to-primary rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+              <Award className="w-4 h-4 mr-2" />
+              Client Success Stories
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text text-transparent">
+              What Our Clients Say
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+              Don't just take our word for it. Here's what industry leaders say about our transformative solutions.
+            </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-border">
-                <CardContent className="p-8">
-                  <p className="text-muted-foreground mb-6 italic">"{testimonial.text}"</p>
-                  <div className="flex items-center space-x-4">
-                    <ImageWithFallback
-                      src={`https://images.unsplash.com/photo-1${494790108755 + index}?w=64&h=64&fit=crop&crop=face`}
-                      alt={testimonial.name}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <div>
-                      <div className="font-semibold">{testimonial.name}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.company}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+          
+          {/* Testimonials Carousel */}
+          <TestimonialsCarousel testimonials={testimonials} />
+          
+          {/* Premium CTA */}
+          <div className="text-center mt-16">
+            <Button 
+              size="lg" 
+              onClick={() => onNavigate('contact')}
+              className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white px-8 py-4 text-lg font-semibold shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105"
+            >
+              Join Our Success Stories
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Button>
           </div>
         </div>
       </section>
@@ -393,7 +486,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               size="lg" 
               variant="outline"
               onClick={() => onNavigate('contact')}
-              className="border-primary-foreground text-primary-foreground hover:bg-primary-foreground hover:text-primary dark:border-primary-foreground/70 dark:text-primary-foreground/70 dark:hover:bg-primary-foreground dark:hover:text-primary"
+              className="border-primary-foreground text-slate-900 dark:text-primary-foreground hover:bg-primary-foreground hover:text-black dark:border-primary-foreground/70 dark:hover:bg-primary-foreground dark:hover:text-primary"
             >
               Contact Us
             </Button>

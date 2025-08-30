@@ -1,11 +1,10 @@
 import React, { memo } from 'react';
 import { Button } from './ui/button';
-import { Input } from './ui/input';
 import { useTheme } from './ThemeProvider';
 import { Route } from './Router';
 import { SearchDialog } from './SearchDialog';
 import { AiBotWidget } from './AiBotWidget';
-import { Moon, Sun, Menu, X, Search } from 'lucide-react';
+import { Moon, Sun, Menu, X, Mail, Briefcase, Globe } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { analytics } from '../utils/analytics';
 
@@ -58,25 +57,23 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
 
   const navItems = [
     { label: 'Home', route: 'home' as Route },
-    { label: 'About', route: 'about' as Route },
     { label: 'Services', route: 'services' as Route },
     { label: 'Portfolio', route: 'portfolio' as Route },
+    { label: 'About', route: 'about' as Route },
     { label: 'Blog', route: 'blog' as Route },
-    { label: 'Careers', route: 'careers' as Route },
     { label: 'Contact', route: 'contact' as Route },
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-all duration-500 ease-in-out"
+    <div className="min-h-screen bg-background text-foreground"
       style={{ 
         '--motion-duration': 'var(--motion-reduce, 500ms)',
-        '--motion-easing': 'var(--motion-reduce, cubic-bezier(0.4, 0, 0.2, 1))',
-        transition: 'background-color 500ms cubic-bezier(0.4, 0, 0.2, 1), color 500ms cubic-bezier(0.4, 0, 0.2, 1)'
+        '--motion-easing': 'var(--motion-reduce, cubic-bezier(0.4, 0, 0.2, 1))'
       } as React.CSSProperties}>
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background border-b border-border transition-all duration-500 ease-in-out">
+      <header className="sticky top-0 z-50 bg-background border-b border-border">
         <div className="max-w-full mx-auto px-6 sm:px-8 lg:px-12">
-          <div className="flex items-center justify-between h-24">
+          <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div 
               className="flex items-center cursor-pointer"
@@ -109,15 +106,7 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
             </nav>
 
             {/* Right side buttons */}
-            <div className="flex items-center space-x-3">
-              <div className="relative hidden md:block">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search..."
-                  className="pl-10 pr-4 py-2 w-48 border-border focus:border-primary transition-colors"
-                />
-              </div>
-              
+            <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
                 size="sm"
@@ -128,18 +117,19 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
                 {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
               </Button>
               
-              <div className="hidden md:flex items-center space-x-2">
+              <div className="hidden md:flex items-center space-x-3">
                 <Button
-                  variant="outline"
+                  variant="ghost"
                   size="sm"
                   onClick={() => onNavigate('auth')}
+                  className="text-sm px-4 py-2 h-9 hover:text-primary"
                 >
                   Sign In
                 </Button>
                 <Button
                   size="sm"
                   onClick={() => onNavigate('request')}
-                  className="bg-primary hover:bg-primary/90"
+                  className="bg-primary hover:bg-primary/90 text-sm px-4 py-2 h-9"
                 >
                   Get Started
                 </Button>
@@ -162,29 +152,29 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
           <div className={`fixed inset-0 z-[9999] md:hidden transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'visible' : 'invisible'}`}>
             {/* Backdrop with blur */}
             <div 
-              className={`absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'}`}
+              className={`absolute inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-500 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0'}`}
               onClick={() => setMobileMenuOpen(false)}
             />
             
             {/* Sidebar Panel */}
-            <div className={`absolute top-0 right-0 h-full w-80 bg-slate-900/95 backdrop-blur-md border-l border-slate-700/50 shadow-2xl transform transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div className={`absolute top-0 right-0 h-full w-80 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-700/50 shadow-2xl transform transition-all duration-500 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               <div className="flex flex-col h-full">
                 {/* Header */}
-                <div className="flex items-center justify-between p-6 border-b border-slate-700/50">
+                <div className="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700/50">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
                       <span className="text-white font-bold text-lg">K</span>
                     </div>
                     <div>
-                      <span className="font-bold text-xl text-white">Kaizen Digital</span>
-                      <p className="text-xs text-slate-400 mt-0.5">inspiring borderless thinking</p>
+                      <span className="font-bold text-xl text-slate-900 dark:text-white">Kaizen Digital</span>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">inspiring borderless thinking</p>
                     </div>
                   </div>
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors duration-200"
+                    className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 rounded-lg transition-colors duration-200"
                   >
                     <X className="w-5 h-5" />
                   </Button>
@@ -200,10 +190,10 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
                           onNavigate(item.route);
                           setMobileMenuOpen(false);
                         }}
-                        className={`flex items-center gap-3 w-full text-left px-4 py-4 rounded-lg text-base font-medium transition-all duration-300 transform hover:scale-105 ${
+                        className={`flex items-center gap-3 w-full text-left px-4 py-4 rounded-lg text-base font-medium transition-all duration-300 transform hover:scale-105 cursor-pointer ${
                           currentRoute === item.route 
-                            ? 'bg-primary/20 text-primary border-l-4 border-primary shadow-lg' 
-                            : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
+                            ? 'bg-primary/10 dark:bg-primary/20 text-primary border-l-4 border-primary shadow-md' 
+                            : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-300 dark:hover:text-white dark:hover:bg-slate-800/50'
                         }`}
                         style={{
                           animationDelay: mobileMenuOpen ? `${index * 50}ms` : '0ms'
@@ -216,10 +206,10 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
                 </nav>
 
                 {/* Bottom Section */}
-                <div className="p-6 space-y-4 border-t border-slate-700/50">
+                <div className="p-6 space-y-4 border-t border-slate-200 dark:border-slate-700/50">
                   <Button
                     variant="outline"
-                    className="w-full bg-transparent border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white hover:border-slate-500 py-3 text-base font-medium transition-all duration-300"
+                    className="w-full bg-transparent border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white dark:hover:border-slate-500 py-3 text-base font-medium transition-all duration-300"
                     onClick={() => {
                       onNavigate('auth');
                       setMobileMenuOpen(false);
@@ -257,49 +247,81 @@ const Layout = memo(function Layout({ children, currentRoute, onNavigate }: Layo
       <AiBotWidget onNavigate={onNavigate} />
 
       {/* Footer */}
-      <footer className="bg-card border-t border-border mt-20 transition-all duration-500 ease-in-out">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <footer className="bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 border-t border-slate-200 dark:border-slate-700/50 mt-20 relative overflow-hidden">
+        {/* Premium Background Elements */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-primary to-accent rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-accent to-primary rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2"></div>
+        </div>
+        
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center mb-4">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mr-3">
-                  <span className="text-primary-foreground font-bold">K</span>
+              <div className="flex items-center mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center mr-4 shadow-lg">
+                  <span className="text-white font-bold text-xl">K</span>
                 </div>
                 <div>
-                  <div className="font-bold text-lg">Kaizen Digital Solutions</div>
-                  <div className="text-xs text-muted-foreground">inspiring borderless thinking</div>
+                  <div className="font-bold text-xl text-slate-900 dark:text-white">Kaizen Digital Solutions</div>
+                  <div className="text-sm text-slate-600 dark:text-slate-400 italic">inspiring borderless thinking</div>
                 </div>
               </div>
-              <p className="text-muted-foreground max-w-md">
+              <p className="text-slate-600 dark:text-slate-300 max-w-md leading-relaxed mb-6">
                 Transforming businesses through innovative digital solutions. We help you navigate 
                 the digital landscape with cutting-edge technology and strategic thinking.
               </p>
+              <div className="flex space-x-4">
+                <div className="w-10 h-10 bg-slate-700/50 hover:bg-primary/20 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110">
+                  <Mail className="w-5 h-5 text-slate-400 hover:text-primary transition-colors" />
+                </div>
+                <div className="w-10 h-10 bg-slate-700/50 hover:bg-primary/20 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110">
+                  <Briefcase className="w-5 h-5 text-slate-400 hover:text-primary transition-colors" />
+                </div>
+                <div className="w-10 h-10 bg-slate-700/50 hover:bg-primary/20 rounded-lg flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110">
+                  <Globe className="w-5 h-5 text-slate-400 hover:text-primary transition-colors" />
+                </div>
+              </div>
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Services</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><button onClick={() => onNavigate('services')} className="hover:text-primary">Web Development</button></li>
-                <li><button onClick={() => onNavigate('services')} className="hover:text-primary">App Development</button></li>
-                <li><button onClick={() => onNavigate('services')} className="hover:text-primary">Digital Marketing</button></li>
-                <li><button onClick={() => onNavigate('services')} className="hover:text-primary">Custom Software</button></li>
-                <li><button onClick={() => onNavigate('diged')} className="hover:text-primary">DigEd</button></li>
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-6 relative">
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Services</span>
+                <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-gradient-to-r from-primary to-accent"></div>
+              </h3>
+              <ul className="space-y-3 text-sm">
+                <li><button onClick={() => onNavigate('services')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>Web Development</button></li>
+                <li><button onClick={() => onNavigate('services')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>App Development</button></li>
+                <li><button onClick={() => onNavigate('services')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>Digital Marketing</button></li>
+                <li><button onClick={() => onNavigate('services')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>Custom Software</button></li>
+                <li><button onClick={() => onNavigate('diged')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>DigEd</button></li>
               </ul>
             </div>
             
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><button onClick={() => onNavigate('about')} className="hover:text-primary">About Us</button></li>
-                <li><button onClick={() => onNavigate('careers')} className="hover:text-primary">Careers</button></li>
-                <li><button onClick={() => onNavigate('blog')} className="hover:text-primary">Blog</button></li>
-                <li><button onClick={() => onNavigate('contact')} className="hover:text-primary">Contact</button></li>
+              <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-6 relative">
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">Company</span>
+                <div className="absolute -bottom-2 left-0 w-8 h-0.5 bg-gradient-to-r from-primary to-accent"></div>
+              </h3>
+              <ul className="space-y-3 text-sm">
+                <li><button onClick={() => onNavigate('about')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>About Us</button></li>
+                <li><button onClick={() => onNavigate('blog')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>Blog</button></li>
+                <li><button onClick={() => onNavigate('contact')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>Contact</button></li>
+                <li><button onClick={() => onNavigate('careers')} className="text-slate-600 dark:text-slate-300 hover:text-primary cursor-pointer transition-all duration-300 hover:translate-x-1 flex items-center group"><span className="mr-2 opacity-0 group-hover:opacity-100 transition-opacity">→</span>Careers</button></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-border mt-8 pt-8 text-center text-sm text-muted-foreground">
-            <p>&copy; 2025 Kaizen Digital Solutions. All rights reserved.</p>
+          <div className="border-t border-slate-700/50 mt-12 pt-8">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <p className="text-sm text-slate-400 mb-4 md:mb-0">
+                &copy; 2025 Kaizen Digital Solutions. All rights reserved.
+              </p>
+              <div className="flex space-x-6 text-sm text-slate-400">
+                <button className="hover:text-primary transition-colors cursor-pointer">Privacy Policy</button>
+                <button className="hover:text-primary transition-colors cursor-pointer">Terms of Service</button>
+                <button className="hover:text-primary transition-colors cursor-pointer">Cookies</button>
+              </div>
+            </div>
           </div>
         </div>
       </footer>

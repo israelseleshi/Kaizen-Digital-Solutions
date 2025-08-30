@@ -32,24 +32,10 @@ interface RouterProps {
   onNavigate: (route: Route) => void;
 }
 
-// Loading fallback component
+// Simple loading fallback component
 const PageLoadingFallback = () => (
-  <div className="min-h-screen bg-background">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      <div className="space-y-8">
-        <div className="h-12 w-3/4 bg-muted animate-pulse rounded-md" />
-        <div className="h-6 w-1/2 bg-muted animate-pulse rounded-md" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="space-y-4">
-              <div className="h-48 w-full bg-muted animate-pulse rounded-md" />
-              <div className="h-4 w-3/4 bg-muted animate-pulse rounded-md" />
-              <div className="h-4 w-1/2 bg-muted animate-pulse rounded-md" />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="text-lg">Loading...</div>
   </div>
 );
 
@@ -77,7 +63,7 @@ export default function Router({ currentRoute, onNavigate }: RouterProps) {
       case 'request':
         return <ServiceRequestPage onNavigate={onNavigate} />;
       case 'careers':
-        return <CareersPage />;
+        return <CareersPage onNavigate={onNavigate} />;
       case 'allen':
         return <HomePage onNavigate={onNavigate} />; // Redirect allen to home for now
       default:

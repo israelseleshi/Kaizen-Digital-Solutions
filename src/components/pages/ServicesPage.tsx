@@ -11,7 +11,9 @@ import {
   Users,
   Code,
   Search,
-  CheckCircle
+  CheckCircle,
+  MapPin,
+  Clock
 } from 'lucide-react';
 import { 
   WebDevIllustration, 
@@ -136,7 +138,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="py-20 lg:py-32 bg-gradient-to-br from-primary/5 via-background to-accent/20">
+      <section className="py-12 lg:py-20 bg-gradient-to-br from-primary/5 via-background to-accent/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl lg:text-6xl font-bold mb-6">
             Our <span className="text-primary">Digital Solutions</span>
@@ -260,30 +262,73 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         </div>
       </section>
 
-      {/* Process Section */}
+      {/* Careers Section */}
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Our Process</h2>
+            <h2 className="text-3xl lg:text-4xl font-bold mb-4">
+              Join Our <span className="text-primary">Team</span>
+            </h2>
             <p className="text-xl text-muted-foreground">
-              A proven methodology that delivers exceptional results
+              Be part of a team that's shaping the future of digital solutions. We're always looking for talented individuals who share our passion for innovation.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="space-y-6">
             {[
-              { title: 'Discovery', description: 'We understand your business goals and requirements' },
-              { title: 'Planning', description: 'Strategic planning and technical architecture design' },
-              { title: 'Development', description: 'Agile development with regular progress updates' },
-              { title: 'Launch & Support', description: 'Deployment, training, and ongoing maintenance' }
-            ].map((step, index) => (
-              <div key={index} className="text-center">
-                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center mx-auto mb-4 text-primary-foreground font-bold">
-                  {index + 1}
-                </div>
-                <h3 className="font-semibold text-lg mb-2">{step.title}</h3>
-                <p className="text-muted-foreground text-sm">{step.description}</p>
-              </div>
+              {
+                title: 'Senior Full Stack Developer',
+                department: 'Engineering',
+                location: 'Remote',
+                type: 'Full-time',
+                description: 'Join our engineering team to build cutting-edge web applications.'
+              },
+              {
+                title: 'Digital Marketing Specialist',
+                department: 'Marketing',
+                location: 'Hybrid',
+                type: 'Full-time',
+                description: 'Help our clients grow their online presence with data-driven strategies.'
+              },
+              {
+                title: 'UX/UI Designer',
+                department: 'Design',
+                location: 'Remote',
+                type: 'Full-time',
+                description: 'Create beautiful and intuitive user experiences for our clients.'
+              }
+            ].map((job, index) => (
+              <Card key={index} className="border-border">
+                <CardContent className="p-8">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-xl font-bold mb-2">{job.title}</h3>
+                      <p className="text-muted-foreground mb-4">{job.description}</p>
+                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                        <div className="flex items-center">
+                          <Users className="w-4 h-4 mr-1" />
+                          {job.department}
+                        </div>
+                        <div className="flex items-center">
+                          <MapPin className="w-4 h-4 mr-1" />
+                          {job.location}
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="w-4 h-4 mr-1" />
+                          {job.type}
+                        </div>
+                      </div>
+                    </div>
+                    <Button 
+                      className="mt-4 md:mt-0 md:ml-6"
+                      onClick={() => onNavigate('contact')}
+                    >
+                      Apply Now
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>

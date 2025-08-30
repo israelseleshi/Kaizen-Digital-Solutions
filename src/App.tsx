@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { ThemeProvider } from './components/ThemeProvider';
 import { AppProvider } from './context/AppContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
-import { AnimationProvider } from './components/animations/AnimationProvider';
 import { PersonalizationProvider } from './components/personalization/PersonalizationEngine';
 import Layout from './components/Layout';
 import Router, { Route } from './components/Router';
@@ -101,13 +100,11 @@ export default function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <AnimationProvider>
-          <PersonalizationProvider>
-            <AppProvider>
-              {content}
-            </AppProvider>
-          </PersonalizationProvider>
-        </AnimationProvider>
+        <PersonalizationProvider>
+          <AppProvider>
+            {content}
+          </AppProvider>
+        </PersonalizationProvider>
       </ThemeProvider>
       <Toaster />
       <PerformanceMonitor />
